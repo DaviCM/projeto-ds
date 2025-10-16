@@ -29,7 +29,7 @@ import sqlite3
 
 def get_connection():
     try:
-        con = sqlite3.connect('controle_usuario.db')
+        con = sqlite3.connect('../db/controle_usuario.db')
         print('Conexão bem sucedida!')
         return con
         

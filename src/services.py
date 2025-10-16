@@ -4,14 +4,19 @@ from os import system
 
 from passlib.hash import pbkdf2_sha256 as sha256
 
+def proceed(message):
+    system('cls')
+    print(message)
+    sleep(1)
+    system('cls')
+
+
 # Função que coleta o email do user e verifica se existe '@' - senão, não é um email.
 def get_email(input_string): 
     while True:
         email = input(input_string)
         if '@' not in email:
-            print('Email inválido. Por favor, insira outro.')
-            sleep(1)
-            system('cls')
+            proceed('Email inválido. Por favor, insira outro.')
             continue
         else:
             system('cls')
@@ -24,7 +29,17 @@ def get_password(input_string):
         pw_char = ''.join(input(input_string))
         pw = sha256.hash(pw_char)
         return pw
-        
+
+
+def get_int(message):
+    while True:
+        try:
+            value = int(input(message).strip())
+            return value
+        except ValueError:
+            proceed('Opção inválida. Tente novamente.')
+            continue
+            
     
 def create_table():
     try:
@@ -45,7 +60,7 @@ def create_table():
         )
     
     except Exception as e:
-        print(f'Não foi possível criar a tabela. Erro: {e}')
+        proceed(f'Não foi possível criar a tabela. Erro: {e}')
         
     finally:
         cursor.close()
@@ -73,7 +88,7 @@ def create_user(nome, email, senha):
         print('Usuário cadastrado com sucesso!')
     
     except Exception as e:
-        print(f'Não foi possível criar o usuário. Erro: {e}')
+        proceed(f'Não foi possível criar o usuário. Erro: {e}')
         
     finally:
         cursor.close()
@@ -88,36 +103,68 @@ def list_users():
         users = cursor.fetchall()
     
     except Exception as e:
-        print(f'Não foi possível listar os usuários. Erro: {e}')
+        proceed(f'Não foi possível listar os usuários. Erro: {e}')
         
     finally:
         cursor.close()
         con.close()
 
 
-def edit_user_info(id):
+def edit_user_info():
+    while True:
+        try:
+            con = get_connection()
+            cursor = con.cursor()
+            cursor.execute('select id, nome from tb_usuario')
+            users = cursor.fetchall()
+
+            opt = get_int('Insira o ID do usuário que deseja editar: ')
+
+            if opt in users:
+                print('\n''1 - Editar nome')
+                print('2 - Editar e-mail')
+                print('3 - Editar senha')
+                
+                opt = input('Insira a opção que deseja editar:').strip()
+                match opt:
+                    case '1':
+                        nome = input('Insira o nome que deseja editar: ')
+                        
+                    case '2':
+                        email = input('Insira o email que deseja editar:')
+                        
+                    case '3':
+                        
+                        
+                    case '_':
+                        
+                
+            else:
+                proceed('O ID inserido não consta entre os usuários. Tente novamente.')
+                continue 
+    
+        except Exception as e:
+            proceed(f'Não foi possível acessar o usuário. Erro: {e}')
+            break
+
+        finally:
+            cursor.close()
+            con.close()
+            break
+
+
+def delete_user():
     try:
         con = get_connection()
         cursor = con.cursor()
-    
-    except Exception as e:
-        print(f'Não foi possível acessar o usuário. Erro: {e}')
         
-    finally:
-        cursor.close()
-        con.close()
-
-
-def delete_user(id):
-    try:
-        con = get_connection()
-        cursor = con.cursor()
+        cursor.execute('delete from tb_usuario where id = ?', id)
     
     except Exception as e:
-        print(f'Não foi possível excluir o usuário. Erro: {e}')
+        proceed(f'Não foi possível excluir o usuário. Erro: {e}')
         
     finally:
         cursor.close()
         con.close()
     
-     
+
