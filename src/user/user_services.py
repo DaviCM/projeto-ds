@@ -1,5 +1,5 @@
-from proceed import *
 from connection import get_connection
+from proceed import *
 from passlib.hash import pbkdf2_sha256 as sha256
 
 class GetEmailModeError(Exception):
@@ -57,7 +57,7 @@ def get_int(message):
             continue
             
 
-def log_in():
+def log_in(get_user=False):
     while True:
         try:
             con, cursor = get_connection()
@@ -74,14 +74,16 @@ def log_in():
 
             id, found_pw = result
             
-            if sha256.verify(senha, found_pw) == True:
-                check = True
-                return check, id
-            else:
+            if sha256.verify(senha, found_pw) == False:
                 proceed('E-mail encontrado e senha incorreta. Tente novamente.')
                 continue
-            
-
+            elif get_user == True:
+                cursor.execute('select nome from tb_usuario where email = ?', (email,))
+                nome = cursor.fetchone()[0]
+                return nome, email
+            else:
+                check = True
+                return check, id
         except TypeError:
             proceed('Não foi possível encontrar o usuário. Reiniciando.')
             continue
@@ -136,7 +138,8 @@ def create_user():
             print(f'E-Mail: {email}')
             proceed('Retornando ao menu principal...')
         except Exception as e:
-            proceed(f'A tabela não existe. Crie a tabela primeiro. Erro: {e}')
+            proceed(f'Não foi possível adicionar o usuário. Erro: {e}''\n''Tentando criar tabela. Tente novamente.')
+            create_table()
         finally:
             cursor.close()
             con.close()
@@ -218,7 +221,7 @@ def edit_user_info():
                         con.commit()
                     
                     case '4':
-                        proceed('Retornando ao menu principal.')
+                        proceed('Retornando ao menu principal...')
                         break              
                         
                     case _:
@@ -254,7 +257,7 @@ def delete_user():
                     con.commit()
                     proceed('Usuário exclúido com sucesso! Retornando ao menu principal.')
                 elif opt == 'n':
-                    proceed('Retornando ao menu principal.')
+                    proceed('Retornando ao menu principal...')
                 else:
                     proceed('Opção inválida. Por favor, tente novamente.')
             else:
