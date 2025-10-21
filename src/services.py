@@ -66,16 +66,21 @@ def log_in():
             senha = get_password(input('Insira sua senha: '), hashed=False)
 
             cursor.execute('select id, senha from tb_usuario where email = ?', (email,)) 
-            found_pw = cursor.fetchone()[1]
-
-            if sha256.verify(senha, found_pw) == True:
-                check = True
-                id = cursor.fetchone[0] # esse fdp retorna uma tupla (id,) - dá pra acreditar?
-            else:
+            result = cursor.fetchone()
+            
+            if None in result:
                 proceed('E-mail ou senha não encontrados. Tente novamente.')
                 continue
+
+            id, found_pw = result
             
-            return check, id
+            if sha256.verify(senha, found_pw) == True:
+                check = True
+                return check, id
+            else:
+                proceed('E-mail encontrado e senha incorreta. Tente novamente.')
+                continue
+            
 
         except TypeError:
             proceed('Não foi possível encontrar o usuário. Reiniciando.')
