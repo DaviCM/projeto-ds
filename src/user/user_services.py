@@ -101,7 +101,7 @@ def create_table():
         cursor.execute(
             # Auto increment no sqlite3 é automático em primary key
             '''
-            create table tb_usuario(
+            create table if not exists tb_usuario(
                 
                 id integer primary key, 
                 nome varchar(120) not null,

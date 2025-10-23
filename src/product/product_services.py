@@ -29,7 +29,7 @@ def create_table():
             # Auto increment no sqlite3 é automático em primary key
             # Tipo decimal em sql é similar ao float, porém mais preciso
             '''
-            create table tb_produto(
+            create table if not exists tb_produto(
                 
                 id integer primary key, 
                 desc varchar(120) not null,
