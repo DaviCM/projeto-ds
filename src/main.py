@@ -1,7 +1,7 @@
-from user.user_services import log_in
-from user.user_main import user_main
-from product.product_main import product_main
-from proceed import *
+from services.user_services import log_in
+from controller.user_controller import user_main
+from controller.product_controller import product_main
+from services.proceed import *
 
 def main():
     while True:

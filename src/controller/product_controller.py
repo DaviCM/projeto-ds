@@ -1,14 +1,14 @@
-from user.user_services import *
+from services.product_services import *
 
-def user_main():
+def product_main():
     while True:
-        users = list_users(return_users=True)
+        users = list_products(return_products=True)
 
         if users == None:
-            opt = (input('A lista de usuários está vazia. Deseja cadastrar um? (s/n): ').lower()).strip()
+            opt = (input('A lista de produtos está vazia. Deseja cadastrar um? (s/n): ').lower()).strip()
             if opt == 's':
                 system('cls')
-                create_user()
+                create_product()
                 continue
             elif opt == 'n':
                 system('cls')
@@ -19,31 +19,31 @@ def user_main():
                 continue
         else:
             system('cls')
-            print('Bem-vindo ao gerenciador de usuário com SQLite3!''\n')
-            print('1 - Visualizar usuários cadastrados')
-            print('2 - Cadastrar novo usuário')
-            print('3 - Editar informações de um usuário')
-            print('4 - Remover usuário')
+            print('Bem-vindo ao gerenciador de produtos com SQLite3!''\n')
+            print('1 - Visualizar produtos cadastrados')
+            print('2 - Cadastrar novo produto')
+            print('3 - Editar informações de um produto')
+            print('4 - Remover produto')
             print('5 - Sair')
             opt = input('\n''Escolha o que deseja fazer: ').strip()
 
             match opt:
                 case '1':
-                    list_users()
+                    list_products()
                     continue
 
                 # A partir daqui, chama a função certa para cada opção do user.
                 case '2':
                     system('cls')
-                    create_user()
+                    create_product()
                     continue
                 case '3':
                     system('cls')
-                    edit_user_info()
+                    edit_product_info()
                     continue
                 case '4':
                     system('cls')
-                    delete_user()
+                    sell_product()
                     continue
                 case '5':
                     print('Adeus, amigo.')
