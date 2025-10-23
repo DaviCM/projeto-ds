@@ -1,5 +1,5 @@
 from connection import get_connection
-from proceed import *
+from services.proceed import *
 from getpass import getpass
 from passlib.hash import pbkdf2_sha256 as sha256
 

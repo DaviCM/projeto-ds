@@ -1,5 +1,5 @@
 from connection import get_connection
-from proceed import *
+from services.proceed import *
 from decimal import Decimal
 
 def get_decimal(message):
