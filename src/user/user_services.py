@@ -1,5 +1,6 @@
 from connection import get_connection
 from proceed import *
+from getpass import getpass
 from passlib.hash import pbkdf2_sha256 as sha256
 
 class GetEmailModeError(Exception):
@@ -63,7 +64,7 @@ def log_in(get_user=False):
             con, cursor = get_connection()
 
             email = get_email('Insira seu email: ')
-            senha = get_password(input('Insira sua senha: '), hashed=False)
+            senha = get_password(getpass('Insira sua senha: '), hashed=False)
 
             cursor.execute('select id, senha from tb_usuario where email = ?', (email,)) 
             result = cursor.fetchone()
@@ -125,7 +126,7 @@ def create_user():
             
             nome = (input('Digite seu nome: ').title()).strip()
             email = get_email('Digite seu e-mail: ', mode='signup')
-            senha = get_password(input('Digite sua senha: '))
+            senha = get_password(getpass('Digite sua senha: '))
             
             # Insert em SQL irá inserir um dado na tabela, nas colunas desejadas.
             cursor.execute('insert into tb_usuario(nome, email, senha) values(?, ?, ?);', 
